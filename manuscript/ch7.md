@@ -9,11 +9,11 @@ objetos são uma coisa muito boa - isso é verdade?" Qc Na olhou com pena
 para seu estudante e respondeu, "Tolo pupilo - objetos são meramente cluseres
 dos pobres."
 >
-> Chastised, Anton took his leave from his master and returned to his cell,
-intent on studying closures. He carefully read the entire "Lambda: The
-Ultimate..." series of papers and its cousins, and implemented a small
-Scheme interpreter with a closure-based object system. He learned much, and
-looked forward to informing his master of his progress.
+> Cheteado, Anton despediu-se de seu mestre e retornou à sua célula,
+motivo a estudar closures. Ele cuidadosamente leu toda: "Lambda: The
+Ultimate..." séries de artigos e seus cogêneros, e implementou um pequeno
+interpretador Scheme com um sistema de objetos baseado em clouseres.
+Ele aprendeu muito, e foi informar seu mestre sobre seu progresso.
 >
 > On his next walk with Qc Na, Anton attempted to impress his master by
 saying "Master, I have diligently studied the matter, and now understand
