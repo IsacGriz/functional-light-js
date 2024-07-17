@@ -3,11 +3,11 @@
 
 Anos atrás, Anton van Straaten elaborou o que se tornou famoso e frequentemente citado [koan](https://www.merriam-webster.com/dictionary/koan) para ilustrar e provocar uma importante tensão entre closure e objetos:
 
-> The venerable master Qc Na was walking with his student, Anton. Hoping to
-prompt the master into a discussion, Anton said "Master, I have heard that
-objects are a very good thing - is this true?" Qc Na looked pityingly at
-his student and replied, "Foolish pupil - objects are merely a poor man's
-closures."
+> O venerável mestre Qc Na estava caminhando com seu estudante, Anton. Esperando
+colocar seu mestre em uma discussão, Anton disse "Mestre, eu ouvi que
+objetos são uma coisa muito boa - isso é verdade?" Qc Na olhou com pena
+para seu estudante e respondeu, "Tolo pupilo - objetos são meramente cluseres
+dos pobres."
 >
 > Chastised, Anton took his leave from his master and returned to his cell,
 intent on studying closures. He carefully read the entire "Lambda: The
