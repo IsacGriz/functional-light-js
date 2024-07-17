@@ -7,7 +7,7 @@ Anos atrás, Anton van Straaten elaborou o que se tornou famoso e frequentemente
 colocar seu mestre em uma discussão, Anton disse "Mestre, eu ouvi que
 objetos são uma coisa muito boa - isso é verdade?" Qc Na olhou com pena
 para seu estudante e respondeu, "Tolo pupilo - objetos são meramente cluseres
-dos pobres."
+do 'Paraguai'".
 >
 > Cheteado, Anton despediu-se de seu mestre e retornou à sua célula,
 motivo a estudar closures. Ele cuidadosamente leu toda: "Lambda: The
@@ -15,11 +15,11 @@ Ultimate..." séries de artigos e seus cogêneros, e implementou um pequeno
 interpretador Scheme com um sistema de objetos baseado em clouseres.
 Ele aprendeu muito, e foi informar seu mestre sobre seu progresso.
 >
-> On his next walk with Qc Na, Anton attempted to impress his master by
-saying "Master, I have diligently studied the matter, and now understand
-that objects are truly a poor man's closures." Qc Na responded by hitting
-Anton with his stick, saying "When will you learn? Closures are a poor man's
-object." At that moment, Anton became enlightened.
+> Em sua nova caminhada com Qc Na, Anton tentou impressionar seu mestre
+dizendo "Mestre, eu me dediquei em estudar a matéria, e agora eu entendo
+que objetos são realmente closures do 'Paraguai'." Qc Na respondeu batendo em
+Anton com sua vareta, dizendo "Quando você aprenderá? Closures são objetos do
+'Paraguai'." Naquele momento, Anton ficou iluminado.
 >
 > -- Anton van Straaten 6/4/2003
 >
