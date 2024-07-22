@@ -25,7 +25,7 @@ Anton com sua vareta, dizendo "Quando você aprenderá? Closures são objetos do
 >
 > http://people.csail.mit.edu/gregs/ll1-discuss-archive-html/msg03277.html
 
-The original posting, while brief, has more context to the origin and motivations, and I strongly suggest you read that post to properly set your mindset for approaching this chapter.
+A postagem original, while brief, has more context to the origin and motivations, and I strongly suggest you read that post to properly set your mindset for approaching this chapter.
 
 Many people I've observed read this koan smirk at its clever wit but then move on without it changing much about their thinking. However, the purpose of a koan (from the Zen Buddhist perspective) is to prod the reader into wrestling with the contradictory truths therein. So, go back and read it again. Now read it again.
 
