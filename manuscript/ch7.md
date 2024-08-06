@@ -25,7 +25,7 @@ Anton com sua vareta, dizendo "Quando você aprenderá? Closures são objetos do
 >
 > http://people.csail.mit.edu/gregs/ll1-discuss-archive-html/msg03277.html
 
-The original posting, while brief, has more context to the origin and motivations, and I strongly suggest you read that post to properly set your mindset for approaching this chapter.
+A postagem original, while brief, has more context to the origin and motivations, and I strongly suggest you read that post to properly set your mindset for approaching this chapter.
 
 Many people I've observed read this koan smirk at its clever wit but then move on without it changing much about their thinking. However, the purpose of a koan (from the Zen Buddhist perspective) is to prod the reader into wrestling with the contradictory truths therein. So, go back and read it again. Now read it again.
 
@@ -378,19 +378,19 @@ Recall in [Chapter 2, "Brief Math Review"](ch2.md/#brief-math-review), we discus
 
 But instead of thinking about numbers, let's relate isomorphism to code. Again quoting my blog post:
 
-> [W]hat would isomorphic JS be if there were such a thing? Well, it could be that you have one set of JS code that is converted to another set of JS code, and that (importantly) you could convert from the latter back to the former if you wanted.
+> [O] que seria JS isomórfico se houvesse algo assim? Bem, pode ser que você tenha um conjunto de código JS que é convertido em outro conjunto de código JS, e que (importante) você poderia converter do último de volta para o primeiro se quisesse.
 
-As we asserted earlier with our examples of closures-as-objects and objects-as-closures, these representative alternations go either way. In this respect, they are isomorphisms to each other.
+Como afirmamos anteriormente com nossos exemplos de closures-como-objetos e objetos-como-closures, essas alternâncias representativas vão para ambos os lados. Nesse aspecto, elas são isomorfismos entre si.
 
-Put simply, closures and objects are isomorphic representations of state (and its associated functionality).
+Simplificando, closures e objetos são representações isomórficas de estado (e sua funcionalidade associada).
 
-The next time you hear someone say "X is isomorphic to Y", what they mean is, "X and Y can be converted from either one to the other in either direction, and not lose information."
+Da próxima vez que você ouvir alguém dizer "X é isomórfico a Y", o que eles querem dizer é "X e Y podem ser convertidos de um para o outro em qualquer direção, e não perder informações".
 
-### Under the Hood
+### Debaixo do capô
 
-So, we can think of objects as an isomorphic representation of closures from the perspective of code we could write. But we can also observe that a closure system could actually be implemented -- and likely is -- with objects!
+Então, podemos pensar em objetos como uma representação isomórfica de closure da perspectiva do código que poderíamos escrever. Mas também podemos observar que um sistema de closure poderia realmente ser implementado -- e provavelmente é -- com objetos!
 
-Think about it this way: in the following code, how is JS keeping track of the `x` variable for `inner()` to keep referencing, well after `outer()` has already run?
+Pense desta forma: no código a seguir, como o JS está controlando a variável `x` para `inner()` para continuar referenciando, bem depois que `outer()` já foi executado?
 
 ```js
 function outer() {
@@ -402,7 +402,7 @@ function outer() {
 }
 ```
 
-We could imagine that the scope -- the set of all variables defined -- of `outer()` is implemented as an object with properties. So, conceptually, somewhere in memory, there's something like:
+Podemos imaginar que o escopo -- o conjunto de todas variáveis definidas -- de `outer()` é implementado como um objeto com propriedades. Então, conceitualmente, em algum lugar na memória, tem algo do tipo:
 
 ```js
 scopeOfOuter = {
@@ -410,46 +410,46 @@ scopeOfOuter = {
 };
 ```
 
-And then for the `inner()` function, when created, it gets an (empty) scope object called `scopeOfInner`, which is linked via its `[[Prototype]]` to the `scopeOfOuter` object, sorta like this:
+    E então para a função `inner()`, quando criada, recebe um objeto escopo (empty) chamado `scopeOfInner`, que está vinculado por meio de seu `[[Prototype]]` ao objeto `scopeOfOuter`, mais ou menos assim:
 
 ```js
 scopeOfInner = {};
 Object.setPrototypeOf( scopeOfInner, scopeOfOuter );
 ```
 
-Then, inside `inner()`, when it makes reference to the lexical variable `x`, it's actually more like:
+Então, dentro de `inner()`, quando faz referência à variável lexical `x`, na verdade é mais como:
 
 ```js
 return scopeOfInner.x;
 ```
 
-`scopeOfInner` doesn't have an `x` property, but it's `[[Prototype]]`-linked to `scopeOfOuter`, which does have an `x` property. Accessing `scopeOfOuter.x` via prototype delegation results in the `1` value being returned.
+`scopeOfInner` não tem uma propriedade `x`, mas é `[[Prototype]]`-linkado a `scopeOfOuter`, que tem uma propriedade `x`. Acessar `scopeOfOuter.x` via delegação de protótipo resulta no valor `1` sendo retornado.
 
-In this way, we can sorta see why the scope of `outer()` is preserved (via closure) even after it finishes: because the `scopeOfInner` object is linked to the `scopeOfOuter` object, thereby keeping that object and its properties alive and well.
+Dessa forma, podemos ver por que o escopo de `outer()` é preservado (via closure) mesmo depois de terminar: porque o objeto `scopeOfInner` é vinculado ao objeto `scopeOfOuter`, mantendo assim esse objeto e suas propriedades vivos e bem.
 
-Now, this is all conceptual. I'm not literally saying the JS engine uses objects and prototypes. But it's entirely plausible that it *could* work similarly.
+Agora, tudo isso é conceitual. Não estou dizendo literalmente que o mecanismo JS usa objetos e protótipos. Mas é totalmente plausível que ele *poderia* funcionar de forma semelhante.
 
-Many languages do in fact implement closures via objects. And other languages implement objects in terms of closures. But we'll let the reader use their imagination on how that would work.
+Muitas linguagens de fato implementam closures via objetos. E outras linguagens implementam objetos em termos de closures. Mas deixaremos o leitor usar sua imaginação sobre como isso funcionaria.
 
-## Two Roads Diverged in a Wood...
+## Duas estradas divergiam em uma floresta...
 
-So closures and objects are equivalent, right? Not quite. I bet they're more similar than you thought before you started this chapter, but they still have important differences.
+Então closures e objetos são equivalentes, certo? Não exatamente. Aposto que eles são mais parecidos do que você pensava antes de começar este capítulo, mas eles ainda têm diferenças importantes.
 
-These differences should not be viewed as weaknesses or arguments against usage; that's the wrong perspective. They should be viewed as features and advantages that make one or the other more suitable (and readable!) for a given task.
+Essas diferenças não devem ser vistas como fraquezas ou argumentos contra o uso; essa é a perspectiva errada. Elas devem ser vistas como recursos e vantagens que tornam um ou outro mais adequado (e legível!) para uma determinada tarefa.
 
-### Structural Mutability
+### Mutabilidade Estrutural
 
-Conceptually, the structure of a closure is not mutable.
+Conceitualmente, a estrutura de um closure não é mutável.
 
-In other words, you can never add to or remove state from a closure. Closure is a characteristic of where variables are declared (fixed at author/compile time), and is not sensitive to any runtime conditions -- assuming you use strict mode and/or avoid using cheats like `eval(..)`, of course!
+Em outras palavras, você nunca pode adicionar ou remover o estado de um closure. O closure é uma característica de onde as variáveis ​​são declaradas (fixadas no autor/tempo de compilação) e não é sensível a nenhuma condição de tempo de execução -- assumindo que você use o modo estrito e/ou evite usar truques como `eval(..)`, é claro!
 
-**Note:** The JS engine could technically cull a closure to weed out any variables in its scope that are no longer going to be used, but this is an advanced optimization that's transparent to the developer. Whether the engine actually does these kinds of optimizations, I think it's safest for the developer to assume that closure is per-scope rather than per-variable. If you don't want it to stay around, don't close over it!
+**Observação:** O mecanismo JS poderia tecnicamente eliminar um closure para eliminar quaisquer variáveis ​​em seu escopo que não serão mais usadas, mas esta é uma otimização avançada que é transparente para o desenvolvedor. Se o mecanismo realmente faz esses tipos de otimizações, acho mais seguro para o desenvolvedor assumir que o closure é por escopo em vez de por variável. Se você não quer que ele permaneça, não feche sobre ele!
 
-However, objects by default are quite mutable. You can freely add or remove (`delete`) properties/indices from an object, as long as that object hasn't been frozen (`Object.freeze(..)`).
+No entanto, os objetos por padrão são bastante mutáveis. Você pode adicionar ou remover (`delete`) livremente propriedades/índices de um objeto, desde que esse objeto não tenha sido congelado (`Object.freeze(..)`).
 
-It may be an advantage of the code to be able to track more (or less!) state depending on the runtime conditions in the program.
+Pode ser uma vantagem do código poder rastrear mais (ou menos!) estado dependendo das condições de tempo de execução no programa.
 
-For example, let's imagine tracking the keypress events in a game. Almost certainly, you'll think about using an array to do this:
+Por exemplo, vamos imaginar rastrear os eventos de pressionamento de tecla em um jogo. Quase certamente, você pensará em usar um array para fazer isso:
 
 ```js
 function trackEvent(evt,keypresses = []) {
@@ -461,11 +461,11 @@ var keypresses = trackEvent( newEvent1 );
 keypresses = trackEvent( newEvent2, keypresses );
 ```
 
-**Note:** Did you spot why I didn't `push(..)` directly to `keypresses`? Because in FP, we typically want to treat arrays as immutable data structures that can be re-created and added to, but not directly changed. We trade out the evil of side-effects for an explicit reassignment (more on that later).
+**Nota:** Você percebeu por que eu não dei `push(..)` diretamente para `keypresses`? Porque em FP, normalmente queremos tratar arrays como estruturas de dados imutáveis ​​que podem ser recriadas e adicionadas, mas não alteradas diretamente. Trocamos o mal dos efeitos colaterais por uma reatribuição explícita (mais sobre isso depois).
 
-Though we're not changing the structure of the array, we could if we wanted to. More on this in a moment.
+Embora não estejamos mudando a estrutura do array, poderíamos se quiséssemos. Mais sobre isso em um momento.
 
-But an array is not the only way to track this growing "list" of `evt` objects. We could use closure:
+Mas um array não é a única maneira de rastrear essa "lista" crescente de objetos `evt`. Poderíamos usar o closure:
 
 ```js
 function trackEvent(evt,keypresses = () => []) {
@@ -479,21 +479,21 @@ var keypresses = trackEvent( newEvent1 );
 keypresses = trackEvent( newEvent2, keypresses );
 ```
 
-Do you spot what's happening here?
+Você percebe o que está acontecendo aqui?
 
-Each time we add a new event to the "list", we create a new closure wrapped around the existing `keypresses()` function (closure), which captures the current `evt`. When we call the `keypresses()` function, it will successively call all the nested functions, building up an intermediate array of all the individually closed-over `evt` objects. Again, closure is the mechanism that's tracking all the state; the array you see is only an implementation detail of needing a way to return multiple values from a function.
+Cada vez que adicionamos um novo evento à "lista", criamos um novo closure envolto em torno da função `keypresses()` existente (closure), que captura o `evt` atual. Quando chamamos a função `keypresses()`, ela chamará sucessivamente todas as funções aninhadas, construindo uma matriz intermediária de todos os objetos `evt` fechados individualmente. Novamente, o closure é o mecanismo que rastreia todo o estado; a matriz que você vê é apenas um detalhe de implementação da necessidade de uma maneira de retornar vários valores de uma função.
 
-So which one is better suited for our task? No surprise here, the array approach is probably a lot more appropriate. The structural immutability of a closure means our only option is to wrap more closure around it. Objects are by default extensible, so we can just grow the array as needed.
+Então, qual é mais adequado para nossa tarefa? Nenhuma surpresa aqui, a abordagem de matriz é provavelmente muito mais apropriada. A imutabilidade estrutural de um closure significa que nossa única opção é envolver mais closures em torno dele. Os objetos são extensíveis por padrão, então podemos apenas aumentar a matriz conforme necessário.
 
-By the way, even though I'm presenting this structural (im)mutability as a clear difference between closure and object, the way we're using the object as an immutable value is actually more similar than not.
+A propósito, embora eu esteja apresentando essa (i)mutabilidade estrutural como uma diferença clara entre closure e object, a maneira como estamos usando o object como um valor imutável é, na verdade, mais similar do que não.
 
-Creating a new array for each addition to the array is treating the array as structurally immutable, which is conceptually symmetrical to closure being structurally immutable by its very design.
+Criar um novo array para cada adição ao array é tratar o array como estruturalmente imutável, o que é conceitualmente simétrico ao closure ser estruturalmente imutável por seu próprio design.
 
-### Privacy
+### Privacidade
 
-Probably one of the first differences you think of when analyzing closure vs. object is that closure offers "privacy" of state through nested lexical scoping, whereas objects expose everything as public properties. Such privacy has a fancy name: information hiding.
+Provavelmente uma das primeiras diferenças que você pensa ao analisar closure vs. object é que closure oferece "privacidade" de estado por meio de escopo lexical aninhado, enquanto objects expõem tudo como propriedades públicas. Essa privacidade tem um nome chique: ocultação de informações.
 
-Consider lexical closure hiding:
+Considere a ocultação de closure lexical:
 
 ```js
 function outer() {
@@ -519,13 +519,13 @@ var xPublic = {
 xPublic.x;          // 1
 ```
 
-There are some obvious differences around general software engineering principles -- consider abstraction, the module pattern with public and private APIs, etc. -- but let's try to constrain our discussion to the perspective of FP; this is, after all, a book about functional programming!
+Existem algumas diferenças óbvias em torno dos princípios gerais da engenharia de software — considere a abstração, o padrão de módulo com APIs públicas e privadas, etc. — mas vamos tentar restringir nossa discussão à perspectiva da FP; afinal, este é um livro sobre programação funcional!
 
-#### Visibility
+#### Visibilidade
 
-It may seem that the ability to hide information is a desired characteristic of state tracking, but I believe the FPer might argue the opposite.
+Pode parecer que a capacidade de ocultar informações é uma característica desejada do rastreamento de estado, mas acredito que o FPer pode argumentar o oposto.
 
-One of the advantages of managing state as public properties on an object is that it's easier to enumerate (and iterate!) all the data in your state. Imagine you wanted to process each keypress event (from the earlier example) to save it to a database, using a utility like:
+Uma das vantagens de gerenciar o estado como propriedades públicas em um objeto é que é mais fácil enumerar (e iterar!) todos os dados em seu estado. Imagine que você quisesse processar cada evento de pressionamento de tecla (do exemplo anterior) para salvá-lo em um banco de dados, usando um utilitário como:
 
 ```js
 function recordKeypress(keypressEvt) {
@@ -534,15 +534,15 @@ function recordKeypress(keypressEvt) {
 }
 ```
 
-If you already have an array -- just an object with public numerically named properties -- this is very straightforward using a built-in JS array utility `forEach(..)`:
+Se você já tem um array — apenas um objeto com propriedades públicas nomeadas numericamente — isso é muito simples usando um utilitário de array JS integrado `forEach(..)`:
 
 ```js
 keypresses.forEach( recordKeypress );
 ```
 
-But if the list of keypresses is hidden inside closure, you'll have to expose a utility on the public API of the closure with privileged access to the hidden data.
+Mas se a lista de pressionamentos de tecla estiver oculta dentro do closure, você terá que expor um utilitário na API pública do closure com acesso privilegiado aos dados ocultos.
 
-For example, we can give our closure-`keypresses` example its own `forEach`, like built-in arrays have:
+Por exemplo, podemos dar ao nosso exemplo closure-`keypresses` seu próprio `forEach`, como arrays internos têm:
 
 ```js
 function trackEvent(
@@ -570,41 +570,41 @@ keypresses.list();      // [ evt, evt, .. ]
 keypresses.forEach( recordKeypress );
 ```
 
-The visibility of an object's state data makes using it more straightforward, whereas closure obscures the state making us work harder to process it.
+A visibilidade dos dados de estado de um objeto torna seu uso mais direto, enquanto o closure obscurece o estado, fazendo com que trabalhemos mais para processá-lo.
 
-#### Change Control
+#### Controle de mudança
 
-If the lexical variable `x` is hidden inside a closure, the only code that has the freedom to reassign it is also inside that closure; it's impossible to modify `x` from the outside.
+Se a variável lexical `x` estiver oculta dentro de um closure, o único código que tem a liberdade de reatribuí-la também está dentro desse closure; é impossível modificar `x` de fora.
 
-As we saw in [Chapter 6](ch6.md), that fact alone improves the readability of code by reducing the surface area that the reader must consider to predict the behavior of any given variable.
+Como vimos no [Capítulo 6](ch6.md), esse fato por si só melhora a legibilidade do código ao reduzir a área de superfície que o leitor deve considerar para prever o comportamento de qualquer variável dada.
 
-The local proximity of lexical reassignment is a big reason why I don't find `const` as a feature that helpful. Scopes (and thus closures) should in general be pretty small, and that means there will only be a few lines of code that can affect reassignment. In `outer()` above, we can quickly inspect to see that no line of code reassigns `x`, so for all intents and purposes it's acting as a constant.
+A proximidade local da reatribuição lexical é um grande motivo pelo qual não acho `const` como um recurso tão útil. Os escopos (e, portanto, os closures) devem, em geral, ser bem pequenos, e isso significa que haverá apenas algumas linhas de código que podem afetar a reatribuição. Em `outer()` acima, podemos inspecionar rapidamente para ver se nenhuma linha de código reatribui `x`, então, para todos os efeitos, ele está agindo como uma constante.
 
-This kind of guarantee is a powerful contributor to our confidence in the purity of a function, for example.
+Esse tipo de garantia é um poderoso contribuidor para nossa confiança na pureza de uma função, por exemplo.
 
-On the other hand, `xPublic.x` is a public property, and any part of the program that gets a reference to `xPublic` has the ability, by default, to reassign `xPublic.x` to some other value. That's a lot more lines of code to consider!
+Por outro lado, `xPublic.x` é uma propriedade pública, e qualquer parte do programa que obtém uma referência a `xPublic` tem a capacidade, por padrão, de reatribuir `xPublic.x` a algum outro valor. Isso é muito mais linhas de código para considerar!
 
-That's why in [Chapter 6, we looked at `Object.freeze(..)`](ch6.md/#its-freezing-in-here) as a quick-n-dirty means of making all of an object's properties read-only (`writable: false`), so that they can't be reassigned unpredictably.
+É por isso que no [Capítulo 6, vimos `Object.freeze(..)`](ch6.md/#its-freezing-in-here) como um meio rápido e prático de tornar todas as propriedades de um objeto para somente leitura (`writable: false`), para que elas não possam ser reatribuídas de forma imprevisível.
 
-Unfortunately, `Object.freeze(..)` is both all-or-nothing and irreversible.
+Infelizmente, `Object.freeze(..)` é tudo ou nada e irreversível.
 
-With closure, you have some code with the privilege to change, and the rest of the program is restricted. When you freeze an object, no part of the code will be able to reassign. Moreover, once an object is frozen, it can't be thawed out, so the properties will remain read-only for the duration of the program.
+Com o closure, você tem algum código com o privilégio de alterar, e o resto do programa é restrito. Quando você congela um objeto, nenhuma parte do código poderá ser reatribuída. Além disso, uma vez que um objeto é congelado, ele não pode ser descongelado, então as propriedades permanecerão somente leitura durante a duração do programa.
 
-In places where I want to allow reassignment but restrict its surface area, closures are a more convenient and flexible form than objects. In places where I want no reassignment, a frozen object is a lot more convenient than repeating `const` declarations all over my function.
+Em lugares onde eu quero permitir a reatribuição, mas restringir sua área de superfície, os closures são uma forma mais conveniente e flexível do que objetos. Em lugares onde eu não quero nenhuma reatribuição, um objeto congelado é muito mais conveniente do que repetir declarações `const` em toda a minha função.
 
-Many FPers take a hard-line stance on reassignment: it shouldn't be used. They will tend to use `const` to make all closure variables read-only, and they'll use `Object.freeze(..)` or full immutable data structures to prevent property reassignment. Moreover, they'll try to reduce the amount of explicitly declared/tracked variables and properties wherever possible, preferring value transfer -- function chains, `return` value passed as argument, etc. -- instead of intermediate value storage.
+Muitos FPers assumem uma postura linha-dura sobre reatribuição: ela não deve ser usada. Eles tendem a usar `const` para tornar todas as variáveis ​​de closure para somente leitura, e eles usarão `Object.freeze(..)` ou estruturas de dados totalmente imutáveis ​​para evitar a reatribuição de propriedades. Além disso, eles tentarão reduzir a quantidade de variáveis ​​e propriedades explicitamente declaradas/rastreadas sempre que possível, preferindo transferência de valor — cadeias de funções, valor `return` passado como argumento, etc. — em vez de armazenamento de valor intermediário.
 
-This book is about "Functional-Light" programming in JavaScript, and this is one of those cases where I diverge from the core FP crowd.
+Este livro é sobre programação "Functional-Light" em JavaScript, e este é um daqueles casos em que eu me desvio da multidão do FP principal.
 
-I think variable reassignment can be quite useful, and when used appropriately, quite readable in its explicitness. It's certainly been my experience that debugging is a lot easier when you can insert a `debugger` or breakpoint, or track a watch expression.
+Eu acho que a reatribuição de variáveis ​​pode ser bastante útil e, quando usada apropriadamente, bastante legível em sua explicitude. Certamente tem sido minha experiência que a depuração é muito mais fácil quando você pode inserir um `debugger` ou breakpoint, ou rastrear uma expressão watch.
 
-### Cloning State
+### Estado de clonagem
 
-As we learned in [Chapter 6](ch6.md), one of the best ways we prevent side effects from eroding the predictability of our code is to make sure we treat all state values as immutable, regardless of whether they are actually immutable (frozen) or not.
+Como aprendemos no [Capítulo 6](ch6.md), uma das melhores maneiras de evitar que efeitos colaterais corroam a previsibilidade do nosso código é garantir que tratamos todos os valores de estado como imutáveis, independentemente de serem realmente imutáveis ​​(congelados) ou não.
 
-If you're not using a purpose-built library to provide sophisticated immutable data structures, the simplest approach will suffice: duplicate your objects/arrays each time before making a change.
+Se você não estiver usando uma biblioteca criada especificamente para fornecer estruturas de dados imutáveis ​​sofisticadas, a abordagem mais simples será suficiente: duplique seus objetos/matrizes sempre antes de fazer uma alteração.
 
-Arrays are easy to clone shallowly -- just use `...` array spread:
+Matrizes são fáceis de clonar superficialmente -- basta usar `...` array spread:
 
 ```js
 var a = [ 1, 2, 3 ];
@@ -616,7 +616,7 @@ a;          // [1,2,3]
 b;          // [1,2,3,4]
 ```
 
-Objects can be shallow-cloned relatively easily too:
+Objetos também podem ser clonados relativamente facilmente:
 
 ```js
 var o = {
@@ -633,23 +633,23 @@ var p = Object.assign( {}, o );
 p.y = 3;
 ```
 
-If the values in an object/array are themselves non-primitives (objects/arrays), to get deep cloning you'll have to walk each layer manually to clone each nested object. Otherwise, you'll have copies of shared references to those sub-objects, and that's likely to create havoc in your program logic.
+Se os valores em um objeto/matriz forem eles próprios não primitivos (objetos/matriz), para obter uma clonagem profunda, você terá que percorrer cada camada manualmente para clonar cada objeto aninhado. Caso contrário, você terá cópias de referências compartilhadas para esses subobjetos, e isso provavelmente criará um caos na lógica do seu programa.
 
-Did you notice that this cloning is possible only because all these state values are visible and can thus be easily copied? What about a set of state wrapped up in a closure; how would you clone that state?
+Você percebeu que essa clonagem só é possível porque todos esses valores de estado são visíveis e podem ser facilmente copiados? Que tal um conjunto de estados encapsulados em um closure; como você clonaria esse estado?
 
-That's much more tedious. Essentially, you'd have to do something similar to our custom `forEach` API method earlier: provide a function inside each layer of the closure with the privilege to extract/copy the hidden values, creating new equivalent closures along the way.
+Isso é muito mais tedioso. Essencialmente, você teria que fazer algo semelhante ao nosso método de API personalizado `forEach` anterior: fornecer uma função dentro de cada camada do closure com o privilégio de extrair/copiar os valores ocultos, criando novos closures equivalentes ao longo do caminho.
 
-Even though that's theoretically possible -- another exercise for the reader! -- it's far less practical to implement than you're likely to justify for any real program.
+Embora isso seja teoricamente possível — outro exercício para o leitor! — é muito menos prático de implementar do que você provavelmente justificaria para qualquer programa real.
 
-Objects have a clear advantage when it comes to representing state that we need to be able to clone.
+Os objetos têm uma vantagem clara quando se trata de representar o estado que precisamos clonar.
 
 ### Performance
 
-One reason objects may be favored over closures, from an implementation perspective, is that in JavaScript objects are often lighter-weight in terms of memory and even computation.
+Uma razão pela qual objetos podem ser favorecidos em relação a closures, de uma perspectiva de implementação, é que em JavaScript os objetos são frequentemente mais leves em termos de memória e até mesmo computação.
 
-But be careful with that as a general assertion: there are plenty of things you can do with objects that will erase any performance gains you may get from ignoring closure and moving to object-based state tracking.
+Mas tenha cuidado com isso como uma afirmação geral: há muitas coisas que você pode fazer com objetos que apagarão quaisquer ganhos de desempenho que você possa obter ao ignorar closures e mudar para rastreamento de estado baseado em objeto.
 
-Let's consider a scenario with both implementations. First, the closure-style implementation:
+Vamos considerar um cenário com ambas as implementações. Primeiro, a implementação no estilo closure:
 
 ```js
 function StudentRecord(name,major,gpa) {
@@ -660,15 +660,15 @@ function StudentRecord(name,major,gpa) {
 
 var student = StudentRecord( "Kyle Simpson", "CS", 4 );
 
-// later
+// posteriormente
 
 student();
 // Kyle Simpson, Major: CS, GPA: 4.0
 ```
 
-The inner function `printStudent()` closes over three variables: `name`, `major`, and `gpa`. It maintains this state wherever we transfer a reference to that function -- we call it `student()` in this example.
+A função interna `printStudent()` fecha sobre três variáveis: `name`, `major` e `gpa`. Ela mantém esse estado sempre que transferimos uma referência para essa função -- nós a chamamos de `student()` neste exemplo.
 
-Now for the object (and `this`) approach:
+Agora para a abordagem do objeto (e `this`):
 
 ```js
 function StudentRecord(){
@@ -682,21 +682,21 @@ var student = StudentRecord.bind( {
     gpa: 4
 } );
 
-// later
+// posteriormente
 
 student();
 // Kyle Simpson, Major: CS, GPA: 4.0
 ```
 
-The `student()` function -- technically referred to as a "bound function" -- has a hard-bound `this` reference to the object literal we passed in, such that any later call to `student()` will use that object for its `this`, and thus be able to access its encapsulated state.
+A função `student()` -- tecnicamente chamada de "função vinculada" -- tem uma referência `this` vinculada ao literal de objeto que passamos, de modo que qualquer chamada posterior para `student()` usará esse objeto para seu `this` e, portanto, poderá acessar seu estado encapsulado.
 
-Both implementations have the same outcome: a function with preserved state. But what about the performance; what differences will there be?
+Ambas as implementações têm o mesmo resultado: uma função com estado preservado. Mas e quanto ao desempenho; quais serão as diferenças?
 
-**Note:** Accurately and actionably judging performance of a snippet of JS code is a very dodgy affair. We won't get into all the details here, but I urge you to read *You Don't Know JS: Async & Performance*, specifically Chapter 6, "Benchmarking & Tuning", for more details.
+**Observação:** Julgar com precisão e ação o desempenho de um trecho de código JS é um assunto muito duvidoso. Não entraremos em todos os detalhes aqui, mas recomendo que você leia *Você não conhece JS: Async & Performance*, especificamente o Capítulo 6, "Benchmarking e ajuste", para mais detalhes.
 
-If you were writing a library that created a pairing of state with its function -- either the call to `StudentRecord(..)` in the first snippet or the call to `StudentRecord.bind(..)` in the second snippet -- you're likely to care most about how those two perform. Inspecting the code, we can see that the former has to create a new function expression each time. The second one uses `bind(..)`, which is not as obvious in its implications.
+Se você estivesse escrevendo uma biblioteca que criasse um par de estado com sua função -- seja a chamada para `StudentRecord(..)` no primeiro snippet ou a chamada para `StudentRecord.bind(..)` no segundo snippet -- você provavelmente se importaria mais com o desempenho desses dois. Inspecionando o código, podemos ver que o primeiro tem que criar uma nova expressão de função a cada vez. O segundo usa `bind(..)`, que não é tão óbvio em suas implicações.
 
-One way to think about what `bind(..)` does under the covers is that it creates a closure over a function, like this:
+Uma maneira de pensar sobre o que `bind(..)` faz nos bastidores é que ele cria um closure sobre uma função, assim:
 
 ```js
 function bind(orinFn,thisObj) {
@@ -708,32 +708,32 @@ function bind(orinFn,thisObj) {
 var student = bind( StudentRecord, { name: "Kyle.." } );
 ```
 
-In this way, it looks like both implementations of our scenario create a closure, so the performance is likely to be about the same.
+Dessa forma, parece que ambas as implementações do nosso cenário criam um closure, então o desempenho provavelmente será o mesmo.
 
-However, the built-in `bind(..)` utility doesn't really have to create a closure to accomplish the task. It simply creates a function and manually sets its internal `this` to the specified object. That's potentially a more efficient operation than if we did the closure ourselves.
+No entanto, o utilitário interno `bind(..)` não precisa realmente criar um closure para realizar a tarefa. Ele simplesmente cria uma função e define manualmente seu `this` interno para o objeto especificado. Essa é potencialmente uma operação mais eficiente do que se fizéssemos o closure nós mesmos.
 
-The kind of performance savings we're talking about here is miniscule on an individual operation. But if your library's critical path is doing this hundreds or thousands of times or more, that savings can add up quickly. Many libraries -- Bluebird being one such example -- have ended up optimizing by removing closures and going with objects, in exactly this means.
+O tipo de economia de desempenho de que estamos falando aqui é minúsculo em uma operação individual. Mas se o caminho crítico da sua biblioteca estiver fazendo isso centenas ou milhares de vezes ou mais, essa economia pode aumentar rapidamente. Muitas bibliotecas -- Bluebird sendo um exemplo -- acabaram otimizando removendo closures e indo com objetos, exatamente dessa forma.
 
-Outside of the library use-case, the pairing of the state with its function usually only happens relatively few times in the critical path of an application. By contrast, typically the usage of the function+state -- calling `student()` in either snippet -- is more common.
+Fora do caso de uso da biblioteca, o pareamento do estado com sua função geralmente só acontece relativamente poucas vezes no caminho crítico de um aplicativo. Por outro lado, normalmente o uso da função+estado -- chamando `student()` em qualquer snippet -- é mais comum.
 
-If that's the case for some given situation in your code, you should probably care more about the performance of the latter versus the former.
+Se esse for o caso para alguma situação específica no seu código, você provavelmente deve se importar mais com o desempenho do último em relação ao primeiro.
 
-Bound functions have historically had pretty lousy performance in general, but have recently been much more highly optimized by JS engines. If you benchmarked these variations a couple of years ago, it's entirely possible you'd get different results repeating the same test with the latest engines.
+Funções vinculadas historicamente tiveram um desempenho bem ruim em geral, mas recentemente foram muito mais otimizadas pelos mecanismos JS. Se você comparou essas variações alguns anos atrás, é bem possível que você obtivesse resultados diferentes repetindo o mesmo teste com os mecanismos mais recentes.
 
-A bound function is now likely to perform at least as good if not better as the equivalent closed-over function. So that's another tick in favor of objects over closures.
+Uma função vinculada agora provavelmente terá um desempenho pelo menos tão bom, se não melhor, quanto a função fechada equivalente. Então esse é outro ponto a favor dos objetos em vez dos closures.
 
-I just want to reiterate: these performance observations are not absolutes, and the determination of what's best for a given scenario is very complex. Do not just casually apply what you've heard from others or even what you've seen on some other earlier project. Carefully examine whether objects or closures are appropriately efficient for the task.
+Só quero reiterar: essas observações de desempenho não são absolutas, e a determinação do que é melhor para um determinado cenário é muito complexa. Não aplique casualmente o que você ouviu de outros ou mesmo o que você viu em algum outro projeto anterior. Examine cuidadosamente se os objetos ou closures são apropriadamente eficientes para a tarefa.
 
-## Summary
+## Sumário
 
-The truth of this chapter cannot be written out. One must read this chapter to find its truth.
+A verdade deste capítulo não pode ser escrita. É preciso ler este capítulo para encontrar sua verdade.
 
 ----
 
-Coining some Zen wisdom here was my attempt at being clever. But you deserve a proper summary of this chapter's message.
+Cunhar um pouco de sabedoria Zen aqui foi minha tentativa de ser inteligente. Mas você merece um resumo adequado da mensagem deste capítulo.
 
-Objects and closures are isomorphic to each other, which means that they can be used somewhat interchangeably to represent state and behavior in your program.
+Objetos e fechamentos são isomórficos entre si, o que significa que eles podem ser usados ​​de forma intercambiável para representar estado e comportamento em seu programa.
 
-Representation as a closure has certain benefits, like granular change control and automatic privacy. Representation as an object has other benefits, like easier cloning of state.
+A representação como um closure tem certos benefícios, como controle granular de alterações e privacidade automática. A representação como um objeto tem outros benefícios, como clonagem mais fácil de estado.
 
-The critically thinking FPer should be able to conceive any segment of state and behavior in the program with either representation, and pick the representation that's most appropriate for the task at hand.
+O indivíduo com pensamento crítico deve ser capaz de conceber qualquer segmento de estado e comportamento no programa com qualquer representação e escolher a representação mais apropriada para a tarefa em questão.
